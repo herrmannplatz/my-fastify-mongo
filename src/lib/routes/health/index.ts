@@ -1,6 +1,6 @@
-import fp from 'fastify-plugin'
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 
-export default fp(async function health(server) {
+const plugin: FastifyPluginAsyncTypebox = async function(server) {
   server.route({
     method: 'GET',
     url: '/healthcheck',
@@ -8,4 +8,6 @@ export default fp(async function health(server) {
       return 'ok'
     }
   })
-})
+}
+
+export default plugin

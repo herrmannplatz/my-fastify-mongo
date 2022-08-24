@@ -1,9 +1,14 @@
-# my-fastify-starter
+# my-fastify-mongo
 
 Based on https://github.com/covidgreen/covid-green-backend-api
 
-## Get it
+## Generate types
 
-```
-npx degit github:herrmannplatz/my-fastify-starter#main my-service
-```
+`npx openapi-typescript http://localhost:3000/docs/json --output petstore.ts`
+
+## TODOx
+
+- [ ] migrations
+- [ ] pets crud
+- [ ] todos
+- [x] config

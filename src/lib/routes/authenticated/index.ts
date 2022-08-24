@@ -1,9 +1,9 @@
-import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import fp from 'fastify-plugin'
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { authenticated } from './schema'
 
-export default fp(async function(server) {
-  server.withTypeProvider<TypeBoxTypeProvider>()
+const plugin: FastifyPluginAsyncTypebox = async function(server) {
+  server
     .get('/authenticated', {
       schema: authenticated,
       handler: async (request, response) => {
@@ -11,4 +11,6 @@ export default fp(async function(server) {
         response.status(204)
       }
     })
-})
+}
+
+export default plugin

@@ -7,13 +7,18 @@ const { version } = require('../../../package.json')
 const schema = Type.Object({
   NODE_ENV: Type.Union([
     Type.Literal('development'),
-    Type.Literal('production')
+    Type.Literal('production'),
+    Type.Literal('test'),
   ]),
+  DB_HOST: Type.String(),
+  DB_PORT: Type.String(),
+  DB_DATABASE: Type.String(),
+  DB_USER: Type.String(),
+  DB_PW: Type.String(),
   API_HOST: Type.String(),
   API_PORT: Type.String(),
   CORS_ORIGIN: Type.String(),
   CORS_CREDENTIALS: Type.String(),
-  TIME_ZONE: Type.String(),
   LOG_LEVEL: Type.Union([
     Type.Literal('fatal'),
     Type.Literal('error'),
@@ -41,10 +46,12 @@ export default async function getConfig() {
 
   const config = {
     isProduction,
-    timeZone: env.TIME_ZONE,
     fastify: {
       host: env.API_HOST,
       port: +env.API_PORT
+    },
+    database: {
+      url: `mongodb://${env.DB_USER}:${env.DB_PW}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_DATABASE}`
     },
     fastifyInit: {
       trustProxy: 2,

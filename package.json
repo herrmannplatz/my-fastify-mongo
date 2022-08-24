@@ -11,9 +11,12 @@
     "lint:staged": "lint-staged",
     "build": "tsc",
     "start": "node .",
-    "start:dev": "tsx watch ./src/index.ts | pino-pretty --colorize",
-    "test": "jest --config .jest.json --coverage",
-    "test:watch": "jest --config .jest.json --watch --verbose"
+    "start:dev": "npm run migrations:up && tsx watch ./src/index.ts | pino-pretty --colorize",
+    "test": "npm run migrations:up && jest --config .jest.json --coverage",
+    "test:watch": "jest --config .jest.json --watch --verbose",
+    "migrations:create": "migrate-mongo create",
+    "migrations:up": "migrate-mongo up",
+    "migrations:down": "migrate-mongo down"
   },
   "dependencies": {
     "@faker-js/faker": "7.3.0",
@@ -21,6 +24,7 @@
     "@fastify/cors": "8.1.0",
     "@fastify/formbody": "7.0.1",
     "@fastify/jwt": "6.3.2",
+    "@fastify/mongodb": "^6.0.1",
     "@fastify/swagger": "7.4.1",
     "@fastify/type-provider-typebox": "2.2.0",
     "@sinclair/typebox": "0.24.27",
@@ -49,6 +53,7 @@
     "eslint-plugin-standard": "5.0.0",
     "jest": "28.1.3",
     "lint-staged": "13.0.3",
+    "migrate-mongo": "^9.0.0",
     "pino-pretty": "8.1.0",
     "prettier": "2.7.1",
     "prettier-config-standard": "5.0.0",
