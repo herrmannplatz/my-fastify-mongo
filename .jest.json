@@ -1,0 +1,11 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "collectCoverageFrom": [
+    "!lib/**/**/mocks/*.js",
+    "lib/**/*.js",
+    "!lib/**/*.test.js",
+    "!lib/**/test/**/*.js",
+    "!**/node_modules/**"
+  ]
+}
