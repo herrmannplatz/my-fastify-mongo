@@ -1,5 +1,5 @@
 import fp from 'fastify-plugin'
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
+import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { authenticated } from './schema'
 
 const plugin: FastifyPluginAsyncTypebox = async function(server) {
@@ -13,4 +13,4 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
     })
 }
 
-export default plugin
+export default fp(plugin)

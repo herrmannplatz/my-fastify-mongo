@@ -3,7 +3,7 @@
 const config = {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
-    url: 'mongodb://pets-user:pets-pw@localhost:27017/pets-database',
+    url: 'mongodb://pets:pets@localhost:27017/pets',
 
     options: {
       useNewUrlParser: true, // removes a deprecation warning when connecting

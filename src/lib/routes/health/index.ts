@@ -1,4 +1,5 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import fp from 'fastify-plugin'
+import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 
 const plugin: FastifyPluginAsyncTypebox = async function(server) {
   server.route({
@@ -10,4 +11,4 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
   })
 }
 
-export default plugin
+export default fp(plugin)

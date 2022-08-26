@@ -10,6 +10,7 @@ const schema = Type.Object({
     Type.Literal('production'),
     Type.Literal('test'),
   ]),
+  DB_DISABLED: Type.Boolean(),
   DB_HOST: Type.String(),
   DB_PORT: Type.String(),
   DB_DATABASE: Type.String(),
@@ -51,12 +52,11 @@ export default async function getConfig() {
       port: +env.API_PORT
     },
     database: {
+      disabled: env.DB_DISABLED,
       url: `mongodb://${env.DB_USER}:${env.DB_PW}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_DATABASE}`
     },
     fastifyInit: {
-      trustProxy: 2,
       disableRequestLogging: true,
-      requestIdHeader: 'x-amz-request-id',
       logger: {
         level: env.LOG_LEVEL,
         serializers: {

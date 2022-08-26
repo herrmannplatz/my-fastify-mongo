@@ -1,7 +1,12 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
+import fp from 'fastify-plugin';
+import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { ObjectId } from '@fastify/mongodb';
 import { NotFound, BadRequest } from 'http-errors'
 import { createPet, deletePet, getPet, getPets } from './schema'
+
+interface Pet {
+  name: string
+}
 
 const plugin: FastifyPluginAsyncTypebox = async function(server) {
   server
@@ -10,7 +15,8 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
       handler: async function (request, response) {
         request.authenticate()
 
-        const docs = (await this.mongo.db?.collection('pets').find()?.toArray()) as { _id: ObjectId, name: string }[]
+        const docs = await this.mongo.db?.collection<Pet>('pets').find()?.toArray() ?? []
+
         response.status(200).send(docs.map(doc => ({ id: doc._id.toString(), ...doc })))
       }
     })
@@ -21,7 +27,9 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
 
         const doc = request.body
 
-        const result = await this.mongo.db?.collection('pets').insertOne(request.body)
+        const result = await this.mongo.db
+          ?.collection<Pet>('pets')
+          .insertOne(doc)
 
         if (!result?.insertedId) {
           throw new BadRequest(`Failed to create pet`)
@@ -35,11 +43,15 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
       handler: async function (request, response) {
         request.authenticate()
 
+        if (!ObjectId.isValid(request.params.petsId)) {
+          throw new NotFound('Pet not found')
+        }
+
         const query = { _id: new ObjectId(request.params.petsId) }
 
         const doc = await this.mongo.db
-          ?.collection('pets')
-          .findOne(query) as { _id: ObjectId, name: string }
+          ?.collection<Pet>('pets')
+          .findOne(query)
 
         if (!doc) {
           throw new NotFound('Pet not found')
@@ -55,7 +67,7 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
         const query = { _id: new ObjectId(request.params.petsId) }
 
         const result = await this.mongo.db
-          ?.collection('pets')
+          ?.collection<Pet>('pets')
           .deleteOne(query)
         
         if (!result?.deletedCount) {
@@ -67,4 +79,4 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
     })
 }
 
-export default plugin
+export default fp(plugin)

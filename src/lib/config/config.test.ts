@@ -69,6 +69,7 @@ describe('configuration', () => {
     })
 
     expect(config.database).toEqual({
+      disabled: true,
       url: `mongodb://${DB_USER}:${DB_PW}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}`
     })
   })

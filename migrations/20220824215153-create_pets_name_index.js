@@ -1,6 +1,6 @@
 module.exports = {
   async up(db, client) {
-    return db.collection('pets').createIndex({ name: 1 }, { unique: true })
+    return db.collection('pets').createIndex({ name: 1 })
   },
 
   async down(db, client) {

@@ -39,9 +39,9 @@ export default fp<Config>(async (server, config) => {
 
   server.setErrorHandler((err, req, res) => {
     if (res.statusCode >= 500) {
-      req.log.error({ req, res, err }, err && err.message)
+      req.log.error({ req, res, err }, err?.message)
     } else if (res.statusCode >= 400) {
-      req.log.info({ req, res, err }, err && err.message)
+      req.log.info({ req, res, err }, err?.message)
     }
 
     if (res.statusCode >= 500) {

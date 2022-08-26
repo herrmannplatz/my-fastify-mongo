@@ -4,9 +4,9 @@ services:
     image: 'mongo'
     container_name: 'pets-mongo'
     environment:
-      - MONGO_INITDB_DATABASE=pets-database
-      - MONGO_INITDB_USERNAME=pets-user
-      - MONGO_INITDB_PASSWORD=pets-pw
+      - MONGO_INITDB_DATABASE=pets
+      - MONGO_INITDB_USERNAME=pets
+      - MONGO_INITDB_PASSWORD=pets
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
       - ./mongo-volume:/data/db
