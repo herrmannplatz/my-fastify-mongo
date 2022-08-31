@@ -2,8 +2,6 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import envSchema from 'env-schema'
 import { Static, Type } from '@sinclair/typebox'
 
-import pkg = require('../../../package.json')
-
 const schema = Type.Object({
   NODE_ENV: Type.Union([
     Type.Literal('development'),
@@ -11,11 +9,7 @@ const schema = Type.Object({
     Type.Literal('test')
   ]),
   DB_DISABLED: Type.Boolean(),
-  DB_HOST: Type.String(),
-  DB_PORT: Type.String(),
-  DB_DATABASE: Type.String(),
-  DB_USER: Type.String(),
-  DB_PW: Type.String(),
+  MONGODB_URI: Type.String(),
   API_HOST: Type.String(),
   API_PORT: Type.String(),
   CORS_ORIGIN: Type.String(),
@@ -56,7 +50,7 @@ export default async function getConfig() {
     },
     database: {
       disabled: env.DB_DISABLED,
-      url: `mongodb://${env.DB_USER}:${env.DB_PW}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_DATABASE}`
+      url: env.MONGODB_URI
     },
     fastifyInit: {
       disableRequestLogging: true,
@@ -85,7 +79,7 @@ export default async function getConfig() {
         info: {
           title: 'Fastify starter API',
           description: 'Fastify starter API',
-          version: pkg.version
+          version: '' + process.env.npm_package_version
         }
       }
     },

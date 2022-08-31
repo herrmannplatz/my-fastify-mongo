@@ -1,9 +1,11 @@
 // In this file you can configure migrate-mongo
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const config = {
   mongodb: {
-    // TODO Change (or review) the url to your MongoDB:
-    url: 'mongodb://pets:pets@localhost:27017/pets',
+    url: process.env.MONGODB_URI,
 
     options: {
       useNewUrlParser: true, // removes a deprecation warning when connecting

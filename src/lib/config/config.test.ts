@@ -18,11 +18,7 @@ describe('configuration', () => {
     const CONFIG_VAR_PREFIX = ''
     const API_HOST = faker.internet.ip()
     const API_PORT = faker.datatype.number()
-    const DB_HOST = faker.internet.ip()
-    const DB_PORT = faker.datatype.number()
-    const DB_DATABASE = faker.lorem.word()
-    const DB_USER = faker.name.firstName()
-    const DB_PW = faker.lorem.word()
+    const MONGODB_URI = faker.internet.ip()
     const CORS_ORIGIN = faker.random.word()
     const CORS_CREDENTIALS = faker.datatype.boolean()
     const LOG_LEVEL = faker.helpers.arrayElement(['debug', 'warn', 'silent'])
@@ -33,11 +29,7 @@ describe('configuration', () => {
       CONFIG_VAR_PREFIX,
       API_HOST,
       API_PORT,
-      DB_HOST,
-      DB_PORT,
-      DB_DATABASE,
-      DB_USER,
-      DB_PW,
+      MONGODB_URI,
       CORS_ORIGIN,
       CORS_CREDENTIALS,
       LOG_LEVEL,
@@ -70,7 +62,7 @@ describe('configuration', () => {
 
     expect(config.database).toEqual({
       disabled: true,
-      url: `mongodb://${DB_USER}:${DB_PW}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}`
+      url: MONGODB_URI
     })
   })
 })
