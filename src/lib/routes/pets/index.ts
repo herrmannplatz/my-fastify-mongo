@@ -3,21 +3,21 @@ import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { ObjectId } from '@fastify/mongodb';
 import { NotFound, BadRequest } from 'http-errors'
 import { createPet, deletePet, getPet, getPets } from './schema'
-
-interface Pet {
-  name: string
-}
+import { PetsService, Pet } from './service'
 
 const plugin: FastifyPluginAsyncTypebox = async function(server) {
+
+  const petsService = new PetsService(server.mongo.db!)
+
   server
     .get('/pets', {
       schema: getPets,
       handler: async function (request, response) {
         request.authenticate()
 
-        const docs = await this.mongo.db?.collection<Pet>('pets').find()?.toArray() ?? []
+        const pets = await petsService.getPets()
 
-        response.status(200).send(docs.map(doc => ({ id: doc._id.toString(), ...doc })))
+        response.status(200).send(pets)
       }
     })
     .post('/pets', {
@@ -25,17 +25,12 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
       handler: async function (request, response) {
         request.authenticate()
 
-        const doc = request.body
-
-        const result = await this.mongo.db
-          ?.collection<Pet>('pets')
-          .insertOne(doc)
-
-        if (!result?.insertedId) {
+        const pet = await petsService.createPet(request.body)
+        if (!pet) {
           throw new BadRequest(`Failed to create pet`)
         }
         
-        response.status(201).send({ id: result.insertedId.toString(), ...doc })
+        response.status(201).send(pet)
       }
     })
     .get('/pets/:petsId', {
@@ -43,37 +38,21 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
       handler: async function (request, response) {
         request.authenticate()
 
-        if (!ObjectId.isValid(request.params.petsId)) {
+        const pet = await petsService.getPet(request.params.petsId)
+        if (!pet) {
           throw new NotFound('Pet not found')
         }
-
-        const query = { _id: new ObjectId(request.params.petsId) }
-
-        const doc = await this.mongo.db
-          ?.collection<Pet>('pets')
-          .findOne(query)
-
-        if (!doc) {
-          throw new NotFound('Pet not found')
-        }
-        
-        const { _id, ...petProperties } = doc
-        response.status(200).send({ id: _id.toString(), ...petProperties })
+        response.status(200).send(pet)
       }
     })
     .delete('/pets/:petsId', {
       schema: deletePet,
       handler: async function (request, response) {
-        const query = { _id: new ObjectId(request.params.petsId) }
-
-        const result = await this.mongo.db
-          ?.collection<Pet>('pets')
-          .deleteOne(query)
-        
-        if (!result?.deletedCount) {
-          throw new BadRequest(`Failed to delete pet with id ${query._id}`)
+        const id = request.params.petsId
+        const deleted = await petsService.deletePet(request.params.petsId)
+        if (!deleted) {
+          throw new BadRequest(`Failed to delete pet with id ${id}`)
         }
-
         response.status(204)
       }
     })

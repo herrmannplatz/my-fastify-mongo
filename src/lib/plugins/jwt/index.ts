@@ -20,13 +20,10 @@ declare module '@fastify/jwt' {
 export default fp<Config>(async (server, options) => {
   function authenticate(this: FastifyRequest) {
     try {
+      console.log(this.headers?.authorization)
       const data = server.jwt.verify(
         this.headers?.authorization?.replace(/^Bearer /, '') ?? ''
       )
-
-      if ((data as any).refresh) {
-        throw new Error()
-      }
 
       this.log.info({ data }, 'authorised user')
 
