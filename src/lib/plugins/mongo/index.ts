@@ -1,10 +1,10 @@
 import fp from 'fastify-plugin'
 import fastifyMongodb from '@fastify/mongodb'
-import type { Config } from '../../config';
+import type { Config } from '../../config'
 
 export default fp<Config>(async (server, options) => {
   if (options.database.disabled) {
-    return
+    return server.decorate('mongo', { db: null })
   }
   server.register(fastifyMongodb, {
     forceClose: true,

@@ -1,4 +1,4 @@
-import type { Config } from './config/index';
+import type { Config } from './config/index'
 
 import path from 'path'
 import fp from 'fastify-plugin'
@@ -24,7 +24,7 @@ export default fp<Config>(async (server, config) => {
       options: config
     })
 
-  server.addHook('onRequest', async (req, res) => {
+  server.addHook('onRequest', async (req) => {
     req.log.info({ req }, 'incoming request')
   })
 

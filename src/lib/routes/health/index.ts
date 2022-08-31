@@ -1,7 +1,7 @@
 import fp from 'fastify-plugin'
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 
-const plugin: FastifyPluginAsyncTypebox = async function(server) {
+const plugin: FastifyPluginAsyncTypebox = async function (server) {
   server.route({
     method: 'GET',
     url: '/healthcheck',

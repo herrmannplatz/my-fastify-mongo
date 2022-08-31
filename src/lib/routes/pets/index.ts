@@ -1,12 +1,11 @@
-import fp from 'fastify-plugin';
-import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { ObjectId } from '@fastify/mongodb';
+import fp from 'fastify-plugin'
+import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { NotFound, BadRequest } from 'http-errors'
 import { createPet, deletePet, getPet, getPets } from './schema'
-import { PetsService, Pet } from './service'
+import { PetsService } from './service'
 
-const plugin: FastifyPluginAsyncTypebox = async function(server) {
-
+const plugin: FastifyPluginAsyncTypebox = async function (server) {
+  /* eslint-disable @typescript-eslint/no-non-null-assertion */
   const petsService = new PetsService(server.mongo.db!)
 
   server
@@ -29,7 +28,7 @@ const plugin: FastifyPluginAsyncTypebox = async function(server) {
         if (!pet) {
           throw new BadRequest(`Failed to create pet`)
         }
-        
+
         response.status(201).send(pet)
       }
     })

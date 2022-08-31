@@ -12,7 +12,9 @@ const main = async () => {
 
   const config = await getConfig()
 
-  const server = fastify(config.fastifyInit).withTypeProvider<TypeBoxTypeProvider>()
+  const server = fastify(
+    config.fastifyInit
+  ).withTypeProvider<TypeBoxTypeProvider>()
   server.register(startServer, config)
 
   const address = await server.listen(config.fastify)
@@ -28,7 +30,7 @@ const main = async () => {
           server.log.info({ signal }, 'application closed')
           process.exit(0)
         })
-        .catch(err => {
+        .catch((err) => {
           server.log.error({ err }, 'Error closing the application')
           process.exit(1)
         })

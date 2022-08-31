@@ -1,8 +1,11 @@
 import type { Db, Collection, WithId } from 'mongodb'
 import { ObjectId } from 'mongodb'
 
-function mapObjectIdToString <T extends WithId<unknown>> ({ _id, ...docProperties }: T) {
-  return ({ id: _id.toString(), ...docProperties })
+function mapObjectIdToString<T extends WithId<unknown>>({
+  _id,
+  ...docProperties
+}: T) {
+  return { id: _id.toString(), ...docProperties }
 }
 
 export interface Pet {
@@ -12,20 +15,20 @@ export interface Pet {
 export class PetsService {
   collection: Collection<Pet>
 
-  constructor (db: Db) {
+  constructor(db: Db) {
     this.collection = db?.collection<Pet>('pets')
   }
 
-  async getPets (limit: number = 50, offset: number = 0) {
+  async getPets(limit = 50, offset = 0) {
     return this.collection
       .find()
       .map(mapObjectIdToString)
       .limit(limit)
       .skip(offset)
-      .toArray() 
+      .toArray()
   }
 
-  async createPet (pet: Pet) {
+  async createPet(pet: Pet) {
     const result = await this.collection.insertOne(pet)
     if (!result?.insertedId) {
       return null
@@ -33,7 +36,7 @@ export class PetsService {
     return { id: result.insertedId.toString(), ...pet }
   }
 
-  async getPet (id: string) {
+  async getPet(id: string) {
     if (!ObjectId.isValid(id)) {
       return null
     }
@@ -46,7 +49,7 @@ export class PetsService {
     return { id: _id.toString(), ...properties }
   }
 
-  async deletePet (id: string) {
+  async deletePet(id: string) {
     if (!ObjectId.isValid(id)) {
       return false
     }
@@ -58,4 +61,3 @@ export class PetsService {
     return true
   }
 }
-

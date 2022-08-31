@@ -2,13 +2,13 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import envSchema from 'env-schema'
 import { Static, Type } from '@sinclair/typebox'
 
-const { version } = require('../../../package.json')
+import pkg = require('../../../package.json')
 
 const schema = Type.Object({
   NODE_ENV: Type.Union([
     Type.Literal('development'),
     Type.Literal('production'),
-    Type.Literal('test'),
+    Type.Literal('test')
   ]),
   DB_DISABLED: Type.Boolean(),
   DB_HOST: Type.String(),
@@ -20,21 +20,24 @@ const schema = Type.Object({
   API_PORT: Type.String(),
   CORS_ORIGIN: Type.String(),
   CORS_CREDENTIALS: Type.String(),
-  LOG_LEVEL: Type.Union([
-    Type.Literal('fatal'),
-    Type.Literal('error'),
-    Type.Literal('warn'),
-    Type.Literal('info'),
-    Type.Literal('debug'),
-    Type.Literal('trace'),
-    Type.Literal('silent'),
-  ], { default: 'info' }),
-  JWT_SECRET: Type.String(),
+  LOG_LEVEL: Type.Union(
+    [
+      Type.Literal('fatal'),
+      Type.Literal('error'),
+      Type.Literal('warn'),
+      Type.Literal('info'),
+      Type.Literal('debug'),
+      Type.Literal('trace'),
+      Type.Literal('silent')
+    ],
+    { default: 'info' }
+  ),
+  JWT_SECRET: Type.String()
 })
 
-type Env = Static<typeof schema>   
+type Env = Static<typeof schema>
 
-function parseCorsParameter(param: Env["CORS_ORIGIN"]) {
+function parseCorsParameter(param: Env['CORS_ORIGIN']) {
   if (param === 'true') return true
   if (param === 'false') return false
   return param
@@ -82,7 +85,7 @@ export default async function getConfig() {
         info: {
           title: 'Fastify starter API',
           description: 'Fastify starter API',
-          version
+          version: pkg.version
         }
       }
     },

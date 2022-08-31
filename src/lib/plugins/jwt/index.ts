@@ -1,6 +1,6 @@
 import type { VerifyPayloadType } from '@fastify/jwt'
-import type { FastifyRequest } from 'fastify';
-import type { Config } from '../../config';
+import type { FastifyRequest } from 'fastify'
+import type { Config } from '../../config'
 import fp from 'fastify-plugin'
 import { Unauthorized } from 'http-errors'
 import fastifyJwt from '@fastify/jwt'
@@ -20,7 +20,6 @@ declare module '@fastify/jwt' {
 export default fp<Config>(async (server, options) => {
   function authenticate(this: FastifyRequest) {
     try {
-      console.log(this.headers?.authorization)
       const data = server.jwt.verify(
         this.headers?.authorization?.replace(/^Bearer /, '') ?? ''
       )

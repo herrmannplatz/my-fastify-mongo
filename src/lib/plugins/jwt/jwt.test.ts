@@ -1,19 +1,19 @@
-import { FastifyInstance } from 'fastify';
-import { faker } from '@faker-js/faker';
+import fastify, { FastifyInstance } from 'fastify'
+import { faker } from '@faker-js/faker'
 import jwt from 'jsonwebtoken'
+import jwtPlugin from './index'
+import getConfig, { Config } from '../../config/'
 
 describe('jwt plugin', () => {
   let server: FastifyInstance
-
-  const options = {
-    security: {
-      jwtSecret: 'test'
-    }
-  }
+  let options: Config
 
   beforeAll(async () => {
-    server = require('fastify')()
-    server.register(require('.'), options)
+    options = await getConfig()
+    options.security.jwtSecret = 'test'
+
+    server = fastify()
+    server.register(jwtPlugin, options)
 
     // route that will attempt to authenticate
     server.route({
@@ -71,23 +71,7 @@ describe('jwt plugin', () => {
     const response = await server.inject({
       method: 'GET',
       url: '/authenticate',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    expect(response.statusCode).toEqual(401)
-  })
-
-  it('should return a 401 code when a refresh token is used', async () => {
-    const token = jwt.sign({ refresh: 'refresh' }, options.security.jwtSecret)
-
-    const response = await server.inject({
-      method: 'GET',
-      url: '/authenticate',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      headers: { Authorization: `Bearer ${token}` }
     })
 
     expect(response.statusCode).toEqual(401)

@@ -5,11 +5,11 @@ export const getPets = {
   operationId: 'getPets',
   response: {
     200: Type.Array(
-        Type.Object({
-          id: Type.String(),
-          name: Type.String()
-        })
-      )
+      Type.Object({
+        id: Type.String(),
+        name: Type.String()
+      })
+    )
   }
 }
 export const createPet = {

@@ -1,4 +1,6 @@
+import { FastifyInstance, fastify } from 'fastify'
 import getConfig from './config'
+import serverFactory from './server'
 
 describe('server', () => {
   it('starts a mock server and register plugins', async () => {
@@ -9,16 +11,16 @@ describe('server', () => {
     }
 
     server.register.mockReturnValue(server)
-    require('./server').default(server, await getConfig())
+    serverFactory(server as unknown as FastifyInstance, await getConfig())
     expect(server.register).toHaveBeenCalledTimes(5)
   })
 
   it('starts a real server and hits an authenticated route successfully', async () => {
-    const fastify = require('fastify')()
+    const server = fastify()
 
-    await fastify.register(require('./server'), await getConfig())
+    await server.register(serverFactory, await getConfig())
 
-    const response = await fastify.inject('/authenticated')
+    const response = await server.inject('/authenticated')
 
     expect(response.statusCode).toBe(401)
   })
