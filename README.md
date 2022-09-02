@@ -9,4 +9,3 @@ Based on https://github.com/covidgreen/covid-green-backend-api
 ## Todo'
 
 - [ ] properly deal with db connection in integration tests
-- [ ] generate proper definition names in openapi ts file
