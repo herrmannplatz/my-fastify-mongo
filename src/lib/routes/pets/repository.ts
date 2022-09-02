@@ -12,7 +12,7 @@ export interface Pet {
   name: string
 }
 
-export class PetsService {
+export class PetsRepository {
   collection: Collection<Pet>
 
   constructor(db: Db) {

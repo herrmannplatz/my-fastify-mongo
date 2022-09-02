@@ -1,12 +1,15 @@
 import fp from 'fastify-plugin'
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { NotFound, BadRequest } from 'http-errors'
-import { createPet, deletePet, getPet, getPets } from './schema'
-import { PetsService } from './service'
+import { createPet, deletePet, ErrorSchema, getPet, getPets, PetSchema } from './schema'
+import { PetsRepository } from './repository'
 
 const plugin: FastifyPluginAsyncTypebox = async function (server) {
   /* eslint-disable @typescript-eslint/no-non-null-assertion */
-  const petsService = new PetsService(server.mongo.db!)
+  const petsRepository = new PetsRepository(server.mongo.db!)
+
+  server.addSchema(ErrorSchema)
+  server.addSchema(PetSchema)
 
   server
     .get('/pets', {
@@ -14,7 +17,7 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
       handler: async function (request, response) {
         request.authenticate()
 
-        const pets = await petsService.getPets()
+        const pets = await petsRepository.getPets()
 
         response.status(200).send(pets)
       }
@@ -24,7 +27,7 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
       handler: async function (request, response) {
         request.authenticate()
 
-        const pet = await petsService.createPet(request.body)
+        const pet = await petsRepository.createPet(request.body)
         if (!pet) {
           throw new BadRequest(`Failed to create pet`)
         }
@@ -37,7 +40,7 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
       handler: async function (request, response) {
         request.authenticate()
 
-        const pet = await petsService.getPet(request.params.petsId)
+        const pet = await petsRepository.getPet(request.params.petsId)
         if (!pet) {
           throw new NotFound('Pet not found')
         }
@@ -48,7 +51,7 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
       schema: deletePet,
       handler: async function (request, response) {
         const id = request.params.petsId
-        const deleted = await petsService.deletePet(request.params.petsId)
+        const deleted = await petsRepository.deletePet(request.params.petsId)
         if (!deleted) {
           throw new BadRequest(`Failed to delete pet with id ${id}`)
         }
