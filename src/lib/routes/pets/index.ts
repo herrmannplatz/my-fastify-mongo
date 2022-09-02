@@ -1,7 +1,14 @@
 import fp from 'fastify-plugin'
 import type { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { NotFound, BadRequest } from 'http-errors'
-import { createPet, deletePet, ErrorSchema, getPet, getPets, PetSchema } from './schema'
+import {
+  createPet,
+  deletePet,
+  ErrorSchema,
+  getPet,
+  getPets,
+  PetSchema
+} from './schema'
 import { PetsRepository } from './repository'
 
 const plugin: FastifyPluginAsyncTypebox = async function (server) {

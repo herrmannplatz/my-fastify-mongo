@@ -1,6 +1,8 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import envSchema from 'env-schema'
 import { Static, Type } from '@sinclair/typebox'
+import { SwaggerOptions } from '@fastify/swagger'
+import { FastifyCorsOptions } from '@fastify/cors'
 
 const schema = Type.Object({
   NODE_ENV: Type.Union([
@@ -71,7 +73,7 @@ export default async function getConfig() {
     cors: {
       origin: parseCorsParameter(env.CORS_ORIGIN),
       credentials: /true/i.test(env.CORS_CREDENTIALS)
-    },
+    } as FastifyCorsOptions,
     swagger: {
       routePrefix: '/docs',
       exposeRoute: true,
@@ -81,8 +83,14 @@ export default async function getConfig() {
           description: 'Fastify starter API',
           version: '' + process.env.npm_package_version
         }
+      },
+      refResolver: {
+        // https://github.com/fastify/fastify-swagger#managing-your-refs
+        buildLocalReference(json, _baseUri, __fragment, i) {
+          return json.$id || `my-fragment-${i}`
+        }
       }
-    },
+    } as SwaggerOptions,
     security: {
       jwtSecret: env.JWT_SECRET
     }

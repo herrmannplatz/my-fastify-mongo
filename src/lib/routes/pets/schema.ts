@@ -5,7 +5,7 @@ export const PetSchema = Type.Object(
     id: Type.String(),
     name: Type.String()
   },
-  { $id: 'pet', title: 'PetTitle', default: 'Pet', }
+  { $id: 'PetResponse' }
 )
 
 export const ErrorSchema = Type.Object(
@@ -14,7 +14,7 @@ export const ErrorSchema = Type.Object(
     error: Type.String(),
     message: Type.String()
   },
-  { $id: 'error', description: "Standard Pet Model" }
+  { $id: 'ApiError' }
 )
 
 export const getPets = {
@@ -23,6 +23,7 @@ export const getPets = {
     200: Type.Array(Type.Ref(PetSchema))
   }
 }
+
 export const createPet = {
   operationId: 'createPet',
   body: Type.Object({
