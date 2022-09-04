@@ -12,8 +12,8 @@ const schema = Type.Object({
   ]),
   DB_DISABLED: Type.Boolean(),
   MONGODB_URI: Type.String(),
-  API_HOST: Type.String(),
-  API_PORT: Type.String(),
+  HOST: Type.String(),
+  PORT: Type.String(),
   CORS_ORIGIN: Type.String(),
   CORS_CREDENTIALS: Type.String(),
   LOG_LEVEL: Type.Union(
@@ -46,9 +46,10 @@ export default async function getConfig() {
 
   const config = {
     isProduction,
+    env: env.NODE_ENV,
     fastify: {
-      host: env.API_HOST,
-      port: +env.API_PORT
+      host: env.HOST,
+      port: +env.PORT
     },
     database: {
       disabled: env.DB_DISABLED,

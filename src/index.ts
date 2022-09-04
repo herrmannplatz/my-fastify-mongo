@@ -18,7 +18,7 @@ const main = async () => {
   server.register(startServer, config)
 
   const address = await server.listen(config.fastify)
-  server.log.info(`Server running at: ${address}`)
+  server.log.info(`🏃‍♂️Server running at: ${address}`)
 
   for (const signal of ['SIGINT', 'SIGTERM'] as const) {
     // Use once() so that double signals exits the app
@@ -31,7 +31,7 @@ const main = async () => {
           process.exit(0)
         })
         .catch((err) => {
-          server.log.error({ err }, 'Error closing the application')
+          server.log.error({ err }, '💥Error closing the application')
           process.exit(1)
         })
     })

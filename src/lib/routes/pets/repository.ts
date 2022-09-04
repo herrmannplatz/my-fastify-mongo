@@ -1,63 +1,33 @@
-import type { Db, Collection, WithId } from 'mongodb'
-import { ObjectId } from 'mongodb'
-
-function mapObjectIdToString<T extends WithId<unknown>>({
-  _id,
-  ...docProperties
-}: T) {
-  return { id: _id.toString(), ...docProperties }
-}
-
-export interface Pet {
-  name: string
-}
+import mongoose from 'mongoose'
+import type { Pet, PetDocument } from './model'
+import { PetModel } from './model'
 
 export class PetsRepository {
-  collection: Collection<Pet>
-
-  constructor(db: Db) {
-    this.collection = db?.collection<Pet>('pets')
+  async getPets(limit = 50, offset = 0): Promise<PetDocument[]> {
+    return PetModel.find<PetDocument>().limit(limit).skip(offset)
   }
 
-  async getPets(limit = 50, offset = 0) {
-    return this.collection
-      .find()
-      .map(mapObjectIdToString)
-      .limit(limit)
-      .skip(offset)
-      .toArray()
-  }
-
-  async createPet(pet: Pet) {
-    const result = await this.collection.insertOne(pet)
-    if (!result?.insertedId) {
+  async createPet(pet: Pet): Promise<PetDocument | null> {
+    try {
+      return (await PetModel.create(pet)) as PetDocument
+    } catch (err) {
       return null
     }
-    return { id: result.insertedId.toString(), ...pet }
   }
 
-  async getPet(id: string) {
-    if (!ObjectId.isValid(id)) {
+  async getPet(id: string): Promise<PetDocument | null> {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return null
     }
-
-    const doc = await this.collection.findOne({ _id: new ObjectId(id) })
-    if (!doc) {
-      return null
-    }
-    const { _id, ...properties } = doc
-    return { id: _id.toString(), ...properties }
+    return PetModel.findById(id)
   }
 
-  async deletePet(id: string) {
-    if (!ObjectId.isValid(id)) {
+  async deletePet(id: string): Promise<boolean> {
+    try {
+      await PetModel.deleteOne({ _id: id })
+      return true
+    } catch (err) {
       return false
     }
-
-    const result = await this.collection.deleteOne({ _id: new ObjectId(id) })
-    if (!result?.deletedCount) {
-      return false
-    }
-    return true
   }
 }

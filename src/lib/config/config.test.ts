@@ -16,8 +16,8 @@ describe('configuration', () => {
   it('returns values according to environment variables', async () => {
     const NODE_ENV = 'development'
     const CONFIG_VAR_PREFIX = ''
-    const API_HOST = faker.internet.ip()
-    const API_PORT = faker.datatype.number()
+    const HOST = faker.internet.ip()
+    const PORT = faker.datatype.number()
     const MONGODB_URI = faker.internet.ip()
     const CORS_ORIGIN = faker.random.word()
     const CORS_CREDENTIALS = faker.datatype.boolean()
@@ -27,8 +27,8 @@ describe('configuration', () => {
     Object.assign(process.env, {
       NODE_ENV,
       CONFIG_VAR_PREFIX,
-      API_HOST,
-      API_PORT,
+      HOST,
+      PORT,
       MONGODB_URI,
       CORS_ORIGIN,
       CORS_CREDENTIALS,
@@ -41,8 +41,8 @@ describe('configuration', () => {
     expect(config.isProduction).toEqual(false)
 
     expect(config.fastify).toEqual({
-      host: API_HOST,
-      port: API_PORT
+      host: HOST,
+      port: PORT
     })
 
     expect(config.fastifyInit.logger).toEqual(

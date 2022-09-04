@@ -12,8 +12,7 @@ import {
 import { PetsRepository } from './repository'
 
 const plugin: FastifyPluginAsyncTypebox = async function (server) {
-  /* eslint-disable @typescript-eslint/no-non-null-assertion */
-  const petsRepository = new PetsRepository(server.mongo.db!)
+  const petsRepository = new PetsRepository()
 
   server.addSchema(ErrorSchema)
   server.addSchema(PetSchema)
@@ -25,7 +24,6 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
         request.authenticate()
 
         const pets = await petsRepository.getPets()
-
         response.status(200).send(pets)
       }
     })
@@ -38,7 +36,6 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
         if (!pet) {
           throw new BadRequest(`Failed to create pet`)
         }
-
         response.status(201).send(pet)
       }
     })
@@ -47,9 +44,10 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
       handler: async function (request, response) {
         request.authenticate()
 
-        const pet = await petsRepository.getPet(request.params.petsId)
+        const { petsId } = request.params
+        const pet = await petsRepository.getPet(petsId)
         if (!pet) {
-          throw new NotFound('Pet not found')
+          throw new NotFound(`Pet with id $petsId{} not found`)
         }
         response.status(200).send(pet)
       }
@@ -57,10 +55,12 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
     .delete('/pets/:petsId', {
       schema: deletePet,
       handler: async function (request, response) {
-        const id = request.params.petsId
-        const deleted = await petsRepository.deletePet(request.params.petsId)
+        request.authenticate()
+
+        const { petsId } = request.params
+        const deleted = await petsRepository.deletePet(petsId)
         if (!deleted) {
-          throw new BadRequest(`Failed to delete pet with id ${id}`)
+          throw new BadRequest(`Failed to delete pet with id ${petsId}`)
         }
         response.status(204)
       }
