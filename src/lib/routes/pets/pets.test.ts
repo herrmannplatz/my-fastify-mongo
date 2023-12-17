@@ -1,12 +1,11 @@
+import fastify, { type FastifyInstance } from 'fastify'
 import { sign } from 'jsonwebtoken'
-import fastify from 'fastify'
 import getConfig, { Config } from '../../config'
 import { faker } from '@faker-js/faker'
 
 xdescribe('pets route', () => {
   let options: Config
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let server: any
+  let server: FastifyInstance
 
   beforeAll(async () => {
     options = await getConfig()
@@ -22,7 +21,6 @@ xdescribe('pets route', () => {
   })
 
   beforeEach(() => {
-    jest.setTimeout(10e4)
     jest.resetAllMocks()
   })
 

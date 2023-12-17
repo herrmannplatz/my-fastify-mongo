@@ -1,9 +1,12 @@
+import fastify, { type FastifyInstance } from 'fastify'
+import health from '.'
+
 describe('health route', () => {
-  let server
+  let server: FastifyInstance
 
   beforeAll(async () => {
-    server = require('fastify')()
-    server.register(require('.').default)
+    server = fastify()
+    server.register(health)
     await server.ready()
   })
 

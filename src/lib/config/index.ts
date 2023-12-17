@@ -1,4 +1,3 @@
-import type { FastifyReply, FastifyRequest } from 'fastify'
 import envSchema from 'env-schema'
 import { Static, Type } from '@sinclair/typebox'
 import { SwaggerOptions } from '@fastify/swagger'
@@ -56,25 +55,14 @@ export default async function getConfig() {
       url: env.MONGODB_URI
     },
     fastifyInit: {
-      disableRequestLogging: true,
       logger: {
-        level: env.LOG_LEVEL,
-        serializers: {
-          req: (request: FastifyRequest) => ({
-            method: request.raw.method,
-            url: request.raw.url,
-            hostname: request.hostname
-          }),
-          res: (response: FastifyReply) => ({
-            statusCode: response.statusCode
-          })
-        }
+        level: env.LOG_LEVEL
       }
     },
     cors: {
       origin: parseCorsParameter(env.CORS_ORIGIN),
       credentials: /true/i.test(env.CORS_CREDENTIALS)
-    } as FastifyCorsOptions,
+    } satisfies FastifyCorsOptions,
     swagger: {
       routePrefix: '/docs',
       exposeRoute: true,

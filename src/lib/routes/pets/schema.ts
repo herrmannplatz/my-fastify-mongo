@@ -10,7 +10,7 @@ export const PetSchema = Type.Object(
 
 export const ErrorSchema = Type.Object(
   {
-    statusCode: Type.String(),
+    statusCode: Type.Number(),
     error: Type.String(),
     message: Type.String()
   },
