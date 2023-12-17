@@ -10,6 +10,7 @@ const schema = Type.Object({
     Type.Literal('test')
   ]),
   DB_DISABLED: Type.Boolean(),
+  ENABLE_SWAGGER: Type.Boolean(),
   MONGODB_URI: Type.String(),
   HOST: Type.String(),
   PORT: Type.String(),
@@ -63,6 +64,7 @@ export default async function getConfig() {
       origin: parseCorsParameter(env.CORS_ORIGIN),
       credentials: /true/i.test(env.CORS_CREDENTIALS)
     } satisfies FastifyCorsOptions,
+    isSwaggerEnabled: env.ENABLE_SWAGGER,
     swagger: {
       routePrefix: '/docs',
       exposeRoute: true,

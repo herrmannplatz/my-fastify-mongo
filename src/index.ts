@@ -2,8 +2,8 @@ import fastify from 'fastify'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 import closeWithGrace from 'close-with-grace'
 
-import startServer from './lib/server'
-import getConfig from './lib/config'
+import startServer from './server'
+import getConfig from './config'
 
 const main = async () => {
   const config = await getConfig()

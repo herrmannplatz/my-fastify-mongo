@@ -8,7 +8,7 @@ import formbody from '@fastify/formbody'
 import swagger from '@fastify/swagger'
 
 export default fp<Config>(async (server, config) => {
-  if (!config.isProduction) {
+  if (config.isSwaggerEnabled) {
     server.register(swagger, config.swagger)
   }
 

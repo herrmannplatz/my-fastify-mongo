@@ -7,7 +7,6 @@ import fastifyJwt from '@fastify/jwt'
 
 declare module 'fastify' {
   interface FastifyRequest {
-    // authenticate: () => { refresh: boolean } & VerifyPayloadType
     authenticate: () => VerifyPayloadType
   }
 }
