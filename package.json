@@ -42,6 +42,7 @@
     "mongoose": "8.2.0"
   },
   "devDependencies": {
+    "@tsconfig/node20": "20.1.2",
     "@types/http-errors": "2.0.4",
     "@types/jest": "29.5.12",
     "@types/jsonwebtoken": "9.0.5",
