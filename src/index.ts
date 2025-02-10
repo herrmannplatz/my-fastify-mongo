@@ -14,11 +14,11 @@ const main = async () => {
   server.register(startServer, config)
 
   const address = await server.listen(config.fastify)
-  server.log.info(`🏃‍♂️Server running at: ${address}`)
+  server.log.info(`✅ Server running at: ${address}`)
 
   closeWithGrace(async ({ err }) => {
     if (err) {
-      server.log.error({ err }, '💥Error closing the application')
+      server.log.error({ err }, '💥 Error closing the application')
     }
     server.log.info('closing application')
     await server.close()

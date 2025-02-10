@@ -1,6 +1,6 @@
 import type { Config } from './config/index'
 
-import path from 'path'
+import path from 'node:path'
 import fp from 'fastify-plugin'
 import autoLoad from '@fastify/autoload'
 import cors from '@fastify/cors'

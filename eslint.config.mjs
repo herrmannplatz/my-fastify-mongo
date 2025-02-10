@@ -1,10 +1,5 @@
-import neostandard from 'neostandard'
+import neostandard, { resolveIgnoresFromGitignore } from 'neostandard'
 
 export default neostandard({
-  ignores: [
-    'dist',
-    'node_modules',
-    'coverage',
-    '*.config.js',
-  ],
+  ignores: resolveIgnoresFromGitignore(),
 })
