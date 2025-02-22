@@ -2,7 +2,6 @@ import type { VerifyPayloadType } from '@fastify/jwt'
 import type { FastifyRequest } from 'fastify'
 import type { Config } from '../../config'
 import fp from 'fastify-plugin'
-import { Unauthorized } from 'http-errors'
 import fastifyJwt from '@fastify/jwt'
 
 declare module 'fastify' {
@@ -30,7 +29,7 @@ export default fp<Config>(async (server, options) => {
     } catch (err) {
       this.log.info({ err }, 'error verifying jwt')
 
-      throw new Unauthorized()
+      throw server.httpErrors.unauthorized()
     }
   }
 

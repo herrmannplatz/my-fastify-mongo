@@ -6,6 +6,7 @@ import autoLoad from '@fastify/autoload'
 import cors from '@fastify/cors'
 import formbody from '@fastify/formbody'
 import swagger from '@fastify/swagger'
+import sensible from '@fastify/sensible'
 
 export default fp<Config>(async (server, config) => {
   if (config.isSwaggerEnabled) {
@@ -13,6 +14,7 @@ export default fp<Config>(async (server, config) => {
   }
 
   server
+    .register(sensible)
     .register(cors, config.cors)
     .register(formbody)
     .register(autoLoad, {
