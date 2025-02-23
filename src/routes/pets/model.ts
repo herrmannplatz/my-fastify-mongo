@@ -7,7 +7,7 @@ export const PetSchema = new mongoose.Schema(
   {
     virtuals: {
       id: {
-        get() {
+        get () {
           this._id.toString()
         }
       }

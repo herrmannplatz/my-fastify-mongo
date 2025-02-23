@@ -18,7 +18,7 @@ declare module '@fastify/jwt' {
 }
 
 export default fp<Config>(async (server, options) => {
-  function authenticate(this: FastifyRequest) {
+  function authenticate (this: FastifyRequest) {
     try {
       const data = server.jwt.verify(
         this.headers?.authorization?.replace(/^Bearer /, '') ?? ''

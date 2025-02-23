@@ -11,11 +11,8 @@ xdescribe('pets route', () => {
     options = await getConfig()
 
     server = fastify()
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     server.register(require('../../plugins/jwt'), options)
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     server.register(require('../../plugins/mongo'), options)
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     server.register(require('.'), options)
     await server.ready()
   })

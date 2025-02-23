@@ -33,13 +33,13 @@ const schema = Type.Object({
 
 type Env = Static<typeof schema>
 
-function parseCorsParameter(param: Env['CORS_ORIGIN']) {
+function parseCorsParameter (param: Env['CORS_ORIGIN']) {
   if (param === 'true') return true
   if (param === 'false') return false
   return param
 }
 
-export default async function getConfig() {
+export default async function getConfig () {
   const env = envSchema<Env>({ dotenv: true, schema })
 
   const isProduction = /^\s*production\s*$/i.test(env.NODE_ENV)
@@ -77,7 +77,7 @@ export default async function getConfig() {
       },
       refResolver: {
         // https://github.com/fastify/fastify-swagger#managing-your-refs
-        buildLocalReference(json, _baseUri, __fragment, i) {
+        buildLocalReference (json, _baseUri, __fragment, i) {
           return json.$id || `my-fragment-${i}`
         }
       }

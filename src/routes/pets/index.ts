@@ -34,7 +34,7 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
 
         const pet = await petsRepository.createPet(request.body)
         if (!pet) {
-          throw new BadRequest(`Failed to create pet`)
+          throw new BadRequest('Failed to create pet')
         }
         response.status(201).send(pet)
       }
@@ -47,7 +47,7 @@ const plugin: FastifyPluginAsyncTypebox = async function (server) {
         const { petsId } = request.params
         const pet = await petsRepository.getPet(petsId)
         if (!pet) {
-          throw new NotFound(`Pet with id $petsId{} not found`)
+          throw new NotFound('Pet with id $petsId{} not found')
         }
         response.status(200).send(pet)
       }
